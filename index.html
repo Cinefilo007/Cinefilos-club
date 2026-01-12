@@ -81,17 +81,18 @@
     <iframe id="app-iframe" allow="clipboard-read; clipboard-write; geolocation; microphone; camera"></iframe>
 
     <script>
-        // 1. URL base de tu Apps Script (CÁMBIALA POR LA TUYA)
-        const BASE_URL = "https://script.google.com/macros/s/AKfycbxo76SgZT_y4nNrSIHdA3ksuBw4PEBRjDopsVT9Q4sGCa9VwMTPjkXhRvxENzJEYcdnhA/exec";
-
-        // 2. Capturar los parámetros de la URL actual (cinefilos.club/?ref=XYZ)
+        // 1. URL base de tu Apps Script
+        const BASE_URL = "https://script.google.com/macros/s/AKfycbwvaoTaZYXljZtX139WzFtOzlJqDA1vi7BB-aScTbjoJ5smLixeQZDyJd2hTH22xqt9Ag/exec";
+    
+        // 2. Capturar lo que viene después del dominio (ej: ?ref=F7C8D)
         const queryString = window.location.search;
         
-        // 3. Construir la URL final para el iframe
+        // 3. Inyectar en el iframe
         const iframe = document.getElementById('app-iframe');
+        
+        // Si entraste con ?ref=, se lo pasamos. Si no, cargamos normal.
         iframe.src = BASE_URL + queryString;
-
-        // 4. Manejo de carga
+    
         iframe.onload = function() {
             document.getElementById('loader-wrapper').classList.add('hidden');
             iframe.style.visibility = 'visible';
