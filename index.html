@@ -23,15 +23,21 @@
     </div>
 
     <script>
-        // 1. CONFIGURACIÓN
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx44UZqWjftDIDOJL-pdS5LQiMnH3W0PgDlfM2Gxe9GW2wTkOnC_KiMV61w5mt3ImRWdQ/exec";
-
-        // 2. CAPTURA DE PARÁMETROS
-        const params = window.location.search; 
-        const finalUrl = SCRIPT_URL + params;
-
-        // 3. INYECCIÓN DINÁMICA DEL IFRAME (Más segura)
-        document.body.innerHTML += `<iframe id="main-app" src="${finalUrl}" allow="clipboard-read; clipboard-write; geolocation; microphone; camera" onload="document.getElementById('loader').style.display='none';"></iframe>`;
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzFK_4cKDDuUXl-r8oI7DCljETJTrlxFBoRDL6o0OPHSJFNSJplNCqzR6ZsS_hqzHQ-jA/exec";
+        const params = new URLSearchParams(window.location.search);
+        const refCode = params.get('ref') || "";
+    
+        // Inyectar Iframe
+        document.body.innerHTML += `<iframe id="main-app" src="${SCRIPT_URL}" allow="clipboard-read; clipboard-write; geolocation; microphone; camera"></iframe>`;
+    
+        // ESCUCHAR CUANDO LA APP PIDA EL REF
+        window.addEventListener('message', function(event) {
+            // Cuando el iframe diga "estoy listo", le mandamos el código
+            if (event.data === "get_ref") {
+                const iframe = document.getElementById('main-app');
+                iframe.contentWindow.postMessage({ type: "set_ref", code: refCode }, "*");
+            }
+        });
     </script>
 </body>
 </html>
